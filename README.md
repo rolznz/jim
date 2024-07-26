@@ -18,7 +18,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Run on Fly
 1. Get a fly account and install flyctl
-2. Update fly.toml to have a different name
+2. Update fly.toml to have a different app name
 3. Run fly launch
 ### Updating
 1. Run `fly deploy`
