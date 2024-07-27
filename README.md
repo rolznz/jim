@@ -1,6 +1,10 @@
 # NWC Mint
 
-A mint for Alby Hub that gives out isolated NWC app connections. **WARNING: no responsibility is taken for loss of funds**
+Powered by [Alby Hub](https://getalby.com)
+
+A mint that gives out isolated NWC app connections. **WARNING: no responsibility is taken for loss of funds**
+
+App Connections have a 10 sat / 1% reserve to account for possible routing fees.
 
 ## Development
 
@@ -15,10 +19,13 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-
 ## Run on Fly
+
 1. Get a fly account and install flyctl
 2. Update fly.toml to have a different app name
 3. Run fly launch
+4. Set your fly secrets: `fly secrets set ALBY_HUB_URL="https://nwc...onalby.com" SESSION_COOKIE="session=..." CSRF_TOKEN="..."`
+
 ### Updating
+
 1. Run `fly deploy`
