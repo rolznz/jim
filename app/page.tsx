@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import React from "react";
-import { createNewConnectionSecret } from "./actions";
+import { createNewConnectionSecret, hasPassword } from "./actions";
 import { AlbyExtension } from "./components/AlbyExtension";
 import { Topup } from "./components/Topup";
 import { nwc } from "@getalby/sdk";
@@ -15,7 +15,11 @@ export default function Home() {
   async function onSubmit() {
     setLoading(true);
     try {
-      setConnectionSecret(await createNewConnectionSecret());
+      let password: string | undefined = undefined;
+      if (await hasPassword()) {
+        password = prompt("Please enter the mint password") || undefined;
+      }
+      setConnectionSecret(await createNewConnectionSecret(password));
     } catch (error) {
       console.error(error);
       alert("Something went wrong: " + error);

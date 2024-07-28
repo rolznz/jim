@@ -16,6 +16,8 @@ You can also create new wallets via the API. Simply do a POST request to `/api/w
 }
 ```
 
+If a password is required, specify it in the `Authorization` header in the basic auth format, where the ID is an empty string. e.g. `"Authorization": "Basic OjEyMw=="` for password `123`.
+
 ## Development
 
 Copy .env.example to .env.local and update the ALBY_HUB_URL and SESSION_COOKIE property.
@@ -36,7 +38,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 1. Get a fly account and install flyctl
 2. Update fly.toml to have a different app name
 3. Run fly launch
-4. Set your fly secrets: `fly secrets set ALBY_HUB_URL="https://nwc...onalby.com" SESSION_COOKIE="session=..." CSRF_TOKEN="..."`
+4. Set your fly secrets: `fly secrets set ALBY_HUB_URL="https://nwc...onalby.com" SESSION_COOKIE="session=..." CSRF_TOKEN="..." PASSWORD=""`
+
+You can get the SESSION_COOKIE by logging into Alby Hub and inspecting the request headers of network traffic in your browser dev tools of one of the XHR requests made to Alby Hub.
 
 ### Updating
 
@@ -51,11 +55,11 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [x] Open in default app
 - [x] Copy NWC connection
 - [x] show amount in custody, how many wallets minted, last used
-- [ ] create NWC connection secrets via REST API
-- [ ] password protect
+- [x] create NWC connection secrets via REST API
+- [x] password protect
+- [ ] basic lightning addresses
 - [ ] rate limit (how many connections can be created)
 - [ ] per-connection limits
-- [ ] basic lightning addresses
 - [ ] extra open actions (Alby Account, Mobile Wallet, Web Wallet, Nostrudel?, ...) & instructions
 
 ## Warning

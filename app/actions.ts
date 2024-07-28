@@ -10,8 +10,20 @@ export type Reserves = {
 
 const APP_NAME_PREFIX = "NWC mint ";
 
-export async function createNewConnectionSecret(): Promise<string | undefined> {
+export async function hasPassword() {
+  return !!process.env.PASSWORD;
+}
+
+export async function createNewConnectionSecret(
+  password: string | undefined
+): Promise<string | undefined> {
   try {
+    if (process.env.PASSWORD) {
+      if (password !== process.env.PASSWORD) {
+        return undefined;
+      }
+    }
+
     const newAppResponse = await fetch(`${process.env.ALBY_HUB_URL}/api/apps`, {
       method: "POST",
       body: JSON.stringify({
