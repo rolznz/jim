@@ -1,19 +1,21 @@
 "use server";
 
+export type Reserves = {
+  numChannels: number;
+  totalOutgoingCapacity: number;
+  totalChannelCapacity: number;
+  numApps: number;
+  totalAppBalance: number;
+};
+
+const APP_NAME_PREFIX = "NWC mint ";
+
 export async function createNewConnectionSecret(): Promise<string | undefined> {
   try {
-    const csrf = (process.env.SESSION_COOKIE as string)
-      .split("; ")
-      .find((v) => v.startsWith("_csrf"))
-      ?.substring("_csrf=".length);
-    if (!csrf) {
-      throw new Error("No CSRF in SESSION_COOKIE");
-    }
-
     const newAppResponse = await fetch(`${process.env.ALBY_HUB_URL}/api/apps`, {
       method: "POST",
       body: JSON.stringify({
-        name: "NWC mint " + Math.floor(Date.now() / 1000),
+        name: APP_NAME_PREFIX + Math.floor(Date.now() / 1000),
         pubkey: "",
         budgetRenewal: "monthly",
         maxAmount: 0,
@@ -28,12 +30,7 @@ export async function createNewConnectionSecret(): Promise<string | undefined> {
         returnTo: "",
         isolated: true,
       }),
-      headers: {
-        Cookie: process.env.SESSION_COOKIE as string,
-        "X-Csrf-Token": csrf,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
+      headers: getHeaders(),
     });
     if (!newAppResponse.ok) {
       throw new Error("Failed to create app: " + (await newAppResponse.text()));
@@ -47,4 +44,58 @@ export async function createNewConnectionSecret(): Promise<string | undefined> {
     console.error(error);
     return undefined;
   }
+}
+
+export async function getReserves(): Promise<Reserves | undefined> {
+  try {
+    const apps = (await fetch(`${process.env.ALBY_HUB_URL}/api/apps`, {
+      headers: getHeaders(),
+    }).then((res) => res.json())) as { name: string; balance: number }[];
+
+    const channels = (await fetch(`${process.env.ALBY_HUB_URL}/api/channels`, {
+      headers: getHeaders(),
+    }).then((res) => res.json())) as {
+      localSpendableBalance: number;
+      localBalance: number;
+      remoteBalance: number;
+    }[];
+
+    const mintApps = apps.filter((app) => app.name.startsWith(APP_NAME_PREFIX));
+    const totalAppBalance = mintApps
+      .map((app) => app.balance)
+      .reduce((a, b) => a + b, 0);
+
+    const totalOutgoingCapacity = channels
+      .map((channel) => channel.localSpendableBalance)
+      .reduce((a, b) => a + b, 0);
+    const totalChannelCapacity = channels
+      .map((channel) => channel.localBalance + channel.remoteBalance)
+      .reduce((a, b) => a + b, 0);
+
+    return {
+      numApps: mintApps.length,
+      totalAppBalance,
+      numChannels: channels.length,
+      totalOutgoingCapacity,
+      totalChannelCapacity,
+    };
+  } catch (error) {
+    console.error(error);
+    return undefined;
+  }
+}
+function getHeaders() {
+  const csrf = (process.env.SESSION_COOKIE as string)
+    .split("; ")
+    .find((v) => v.startsWith("_csrf"))
+    ?.substring("_csrf=".length);
+  if (!csrf) {
+    throw new Error("No CSRF in SESSION_COOKIE");
+  }
+  return {
+    Cookie: process.env.SESSION_COOKIE as string,
+    "X-Csrf-Token": csrf,
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  };
 }

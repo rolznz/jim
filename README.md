@@ -2,6 +2,8 @@
 
 Powered by [Alby Hub](https://getalby.com)
 
+Create a mint in minutes that you can give to your community, friends or family. They get wallets powered by your Alby Hub.
+
 A mint that gives out isolated NWC app connections. **WARNING: no responsibility is taken for loss of funds**
 
 App Connections have a 10 sat / 1% reserve to account for possible routing fees.
@@ -34,9 +36,16 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## TODOs
 
-- [ ] show amount in custody, how many wallets minted, last used
+- [x] One click mint
+- [x] Show balance
+- [x] Topups
+- [x] Open in Alby Extension
+- [x] Open in default app
+- [x] Copy NWC connection
+- [x] show amount in custody, how many wallets minted, last used
+- [ ] create NWC connection secrets via REST API
 - [ ] password protect
 - [ ] rate limit (how many connections can be created)
 - [ ] per-connection limits
 - [ ] basic lightning addresses
-- [ ] extra open actions (Alby Account, Mobile Wallet, Web Wallet, Nostrudel?, ...)
+- [ ] extra open actions (Alby Account, Mobile Wallet, Web Wallet, Nostrudel?, ...) & instructions

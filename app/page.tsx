@@ -5,6 +5,7 @@ import { createNewConnectionSecret } from "./actions";
 import { AlbyExtension } from "./components/AlbyExtension";
 import { Topup } from "./components/Topup";
 import { nwc } from "@getalby/sdk";
+import Link from "next/link";
 
 export default function Home() {
   const [connectionSecret, setConnectionSecret] = React.useState<string>();
@@ -122,6 +123,9 @@ export default function Home() {
           <img width={16} src="/alby-hub.svg" alt="" /> Alby Hub
         </a>
       </p>
+      <Link href="/reserves" className="text-xs link mt-4">
+        View reserves
+      </Link>
     </>
   );
 }
