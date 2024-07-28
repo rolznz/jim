@@ -1,7 +1,15 @@
 "use server";
 
-export async function createNewConnectionSecret(): Promise<string> {
+export async function createNewConnectionSecret(): Promise<string | undefined> {
   try {
+    const csrf = (process.env.SESSION_COOKIE as string)
+      .split("; ")
+      .find((v) => v.startsWith("_csrf"))
+      ?.substring("_csrf=".length);
+    if (!csrf) {
+      throw new Error("No CSRF in SESSION_COOKIE");
+    }
+
     const newAppResponse = await fetch(`${process.env.ALBY_HUB_URL}/api/apps`, {
       method: "POST",
       body: JSON.stringify({
@@ -22,7 +30,7 @@ export async function createNewConnectionSecret(): Promise<string> {
       }),
       headers: {
         Cookie: process.env.SESSION_COOKIE as string,
-        "X-Csrf-Token": process.env.CSRF_TOKEN as string,
+        "X-Csrf-Token": csrf,
         "Content-Type": "application/json",
         Accept: "application/json",
       },
@@ -37,7 +45,6 @@ export async function createNewConnectionSecret(): Promise<string> {
     return newApp.pairingUri;
   } catch (error) {
     console.error(error);
-    // don't expose the original error
-    throw new Error("Failed to create app");
+    return undefined;
   }
 }

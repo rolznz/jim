@@ -8,7 +8,9 @@ App Connections have a 10 sat / 1% reserve to account for possible routing fees.
 
 ## Development
 
-Copy .env.example to .env.local and update the ALBY_HUB_URL, SESSION_COOKIE and CSRF_TOKEN property. You can get this by logging into Alby Hub and inspecting the request headers of network traffic in your browser dev tools and creating a new app. The CSRF_TOKEN must match the CSRF token in the Cookie header.
+Copy .env.example to .env.local and update the ALBY_HUB_URL and SESSION_COOKIE property.
+
+You can get the SESSION_COOKIE by logging into Alby Hub and inspecting the request headers of network traffic in your browser dev tools of one of the XHR requests made to Alby Hub.
 
 Then, run the development server:
 
