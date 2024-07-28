@@ -31,3 +31,12 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ### Updating
 
 1. Run `fly deploy`
+
+## TODOs
+
+- [ ] show amount in custody, how many wallets minted, last used
+- [ ] password protect
+- [ ] rate limit (how many connections can be created)
+- [ ] per-connection limits
+- [ ] basic lightning addresses
+- [ ] extra open actions (Alby Account, Mobile Wallet, Web Wallet, Nostrudel?, ...)
