@@ -72,7 +72,9 @@ export async function getReserves(): Promise<Reserves | undefined> {
       remoteBalance: number;
     }[];
 
-    const mintApps = apps.filter((app) => app.name.startsWith(APP_NAME_PREFIX));
+    const mintApps = apps.filter(
+      (app) => app.name.startsWith(APP_NAME_PREFIX) && app.balance > 0
+    );
     const totalAppBalance = mintApps
       .map((app) => app.balance)
       .reduce((a, b) => a + b, 0);
