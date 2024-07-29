@@ -12,7 +12,8 @@ You can also create new wallets via the API. Simply do a POST request to `/api/w
 
 ```json
 {
-  "connectionSecret": "nostr+walletconnect://xxxxx"
+  "connectionSecret": "nostr+walletconnect://xxx?relay=yyy&secret=zzz&lud16=123456@nwc-mint.fly.dev",
+  "lightningAddress": "123456@nwc-mint.fly.dev"
 }
 ```
 

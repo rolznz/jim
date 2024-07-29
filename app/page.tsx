@@ -168,9 +168,23 @@ export default function Home() {
           <img width={16} src="/alby-hub.svg" alt="" /> Alby Hub
         </a>
       </p>
-      <Link href="/reserves" className="text-xs link mt-4">
-        View reserves
-      </Link>
+      <div className="flex flex-col justify-center items-center mt-4">
+        <Link href="/reserves" className="text-xs link mt-4">
+          View reserves
+        </Link>
+        <a
+          href="https://github.com/rolznz/nwc-mint?tab=readme-ov-file#api"
+          className="text-xs link mt-4"
+        >
+          Developer API
+        </a>
+        <a
+          href="https://github.com/rolznz/nwc-mint"
+          className="text-xs link mt-4"
+        >
+          source
+        </a>
+      </div>
     </>
   );
 }
