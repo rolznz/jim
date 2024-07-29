@@ -5,6 +5,7 @@
 
 app = 'nwc-mint'
 primary_region = 'lax'
+swap_size_mb = 512
 
 [build]
 
@@ -18,6 +19,7 @@ primary_region = 'lax'
 
 [[vm]]
   size = 'shared-cpu-1x'
+  memory_mb = 512
 
 [[mounts]]
   source = 'nwc_mint_data'
