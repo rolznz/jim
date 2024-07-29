@@ -1,4 +1,4 @@
-import { createNewConnectionSecret } from "@/app/actions";
+import { createWallet } from "@/app/actions";
 
 export async function POST(request: Request) {
   const credentials = request.headers.get("Authorization")?.split(" ")?.[1];
@@ -7,7 +7,17 @@ export async function POST(request: Request) {
     ? Buffer.from(credentials, "base64").toString().split(":")?.[1]
     : undefined;
 
-  const connectionSecret = await createNewConnectionSecret(password);
+  const response = await createWallet(
+    password,
+    request.url.split("//")[1].split("/")[0]
+  );
 
-  return Response.json({ connectionSecret });
+  if (!response) {
+    return Response.error();
+  }
+
+  return Response.json({
+    connectionSecret: response?.connectionSecret,
+    lightningAddress: response?.lightningAddress,
+  });
 }

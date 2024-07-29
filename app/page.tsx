@@ -1,16 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import React from "react";
-import { createNewConnectionSecret, hasPassword } from "./actions";
+import { createWallet, hasPassword } from "./actions";
 import { AlbyExtension } from "./components/AlbyExtension";
 import { Topup } from "./components/Topup";
 import { nwc } from "@getalby/sdk";
 import Link from "next/link";
 
 export default function Home() {
-  const [connectionSecret, setConnectionSecret] = React.useState<string>();
+  const [wallet, setWallet] = React.useState<{
+    connectionSecret: string;
+    lightningAddress: string;
+  }>();
   const [loading, setLoading] = React.useState(false);
-  const [copied, setCopied] = React.useState(false);
+  const [copied, setCopied] = React.useState<"nwcUrl" | "lightningAddress">();
   const [balance, setBalance] = React.useState(0);
   async function onSubmit() {
     setLoading(true);
@@ -19,7 +22,7 @@ export default function Home() {
       if (await hasPassword()) {
         password = prompt("Please enter the mint password") || undefined;
       }
-      setConnectionSecret(await createNewConnectionSecret(password));
+      setWallet(await createWallet(password, window.origin.split("//")[1]));
     } catch (error) {
       console.error(error);
       alert("Something went wrong: " + error);
@@ -30,8 +33,11 @@ export default function Home() {
   React.useEffect(() => {
     (async () => {
       setBalance(0);
+      if (!wallet) {
+        return;
+      }
       const client = new nwc.NWCClient({
-        nostrWalletConnectUrl: connectionSecret,
+        nostrWalletConnectUrl: wallet.connectionSecret,
       });
 
       const unsub = await client.subscribeNotifications(
@@ -46,13 +52,13 @@ export default function Home() {
         unsub();
       };
     })();
-  }, [connectionSecret]);
+  }, [wallet]);
 
   return (
     <>
       <p className="font-semibold">NWC Mint</p>
       <div className="flex flex-col gap-4 max-w-lg border-2 rounded-xl p-4 items-center justify-center mt-4 mb-16">
-        {!connectionSecret && (
+        {!wallet && (
           <p>
             Mint a new wallet that you can use in any{" "}
             <a href="https://nwc.dev" target="_blank" className="font-semibold">
@@ -69,7 +75,7 @@ export default function Home() {
           </p>
         )}
 
-        {!connectionSecret && (
+        {!wallet && (
           <>
             <button
               onClick={onSubmit}
@@ -80,32 +86,67 @@ export default function Home() {
             </button>
           </>
         )}
-        {connectionSecret && (
+        {wallet && (
           <>
             <p>New Wallet Created!</p>
-            <p className="text-xs">
-              Current balance: {Math.floor(balance / 1000)} sats
+            <p className="text-xs max-w-xs text-center">
+              {"Make sure to copy it and save it somewhere safe."}
             </p>
             <div className="flex w-full gap-2 flex-wrap items-center justify-center">
               <button
-                className={`btn btn-lg btn-primary ${copied && "btn-success"}`}
+                className={`w-80 btn btn-lg btn-primary ${
+                  copied === "nwcUrl" && "btn-success"
+                }`}
                 onClick={async () => {
-                  await navigator.clipboard.writeText(connectionSecret);
-                  setCopied(true);
+                  await navigator.clipboard.writeText(wallet.connectionSecret);
+                  setCopied("nwcUrl");
                   setTimeout(() => {
-                    setCopied(false);
+                    setCopied(undefined);
                   }, 3000);
                 }}
               >
                 {copied ? "Copied!" : "Copy"}
               </button>
-              <a href={connectionSecret} className="btn btn-lg btn-primary">
-                Open in default app
+              <a
+                href={wallet.connectionSecret}
+                className="w-80 btn btn-lg btn-primary"
+              >
+                Open in Damus/Amethyst
               </a>
 
-              <Topup connectionSecret={connectionSecret} />
-              <AlbyExtension connectionSecret={connectionSecret} />
+              <AlbyExtension connectionSecret={wallet.connectionSecret} />
             </div>
+
+            <p className="text-sm mt-4">
+              Current balance: {Math.floor(balance / 1000)} sats
+            </p>
+            <Topup connectionSecret={wallet.connectionSecret} />
+
+            <p className="mt-8 text-sm">Your lightning address is:</p>
+            <p>
+              <span className="font-mono font-semibold">
+                {wallet.lightningAddress}
+              </span>{" "}
+              <button
+                className={`btn btn-sm btn-primary ${
+                  copied === "lightningAddress" && "btn-success"
+                }`}
+                onClick={async () => {
+                  await navigator.clipboard.writeText(wallet.lightningAddress);
+                  setCopied("lightningAddress");
+                  setTimeout(() => {
+                    setCopied(undefined);
+                  }, 3000);
+                }}
+              >
+                {copied ? "Copied!" : "Copy"}
+              </button>
+            </p>
+            <p className="text-xs max-w-xs text-center">
+              {
+                "It's like your email address, but people send you payments instead. You can share this publicly."
+              }
+            </p>
           </>
         )}
       </div>

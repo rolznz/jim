@@ -5,7 +5,7 @@ export function AlbyExtension({
 }) {
   return (
     <button
-      className="btn btn-lg btn-primary"
+      className="w-80 btn btn-lg btn-primary"
       onClick={async () => {
         if (!(window as any).alby) {
           alert(

@@ -53,7 +53,7 @@ export function Topup({ connectionSecret }: { connectionSecret: string }) {
   return (
     <>
       <button
-        className="btn btn-lg btn-primary"
+        className="w-80 btn btn-lg btn-primary"
         onClick={async () => {
           if (!amount) {
             const newAmount = prompt("Enter an amount in sats", "1000");

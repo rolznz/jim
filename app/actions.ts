@@ -1,5 +1,7 @@
 "use server";
 
+import { saveConnectionSecret } from "./db";
+
 export type Reserves = {
   numChannels: number;
   totalOutgoingCapacity: number;
@@ -14,9 +16,10 @@ export async function hasPassword() {
   return !!process.env.PASSWORD;
 }
 
-export async function createNewConnectionSecret(
-  password: string | undefined
-): Promise<string | undefined> {
+export async function createWallet(
+  password: string | undefined,
+  domain: string
+): Promise<{ connectionSecret: string; lightningAddress: string } | undefined> {
   try {
     if (process.env.PASSWORD) {
       if (password !== process.env.PASSWORD) {
@@ -51,7 +54,14 @@ export async function createNewConnectionSecret(
     if (!newApp.pairingUri) {
       throw new Error("No pairing URI in create app response");
     }
-    return newApp.pairingUri;
+
+    const { lightningAddress } = await saveConnectionSecret(newApp.pairingUri);
+
+    return {
+      connectionSecret:
+        newApp.pairingUri + `&lud16=${lightningAddress}@${domain}`,
+      lightningAddress: lightningAddress + "@" + domain,
+    };
   } catch (error) {
     console.error(error);
     return undefined;

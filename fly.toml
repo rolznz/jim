@@ -18,3 +18,9 @@ primary_region = 'lax'
 
 [[vm]]
   size = 'shared-cpu-1x'
+
+[[mounts]]
+  source = 'nwc_mint_data'
+  destination = '/data'
+  initial_size = '1'
+
