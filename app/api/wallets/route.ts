@@ -7,10 +7,7 @@ export async function POST(request: Request) {
     ? Buffer.from(credentials, "base64").toString().split(":")?.[1]
     : undefined;
 
-  const response = await createWallet(
-    password,
-    request.url.split("//")[1].split("/")[0]
-  );
+  const response = await createWallet(password);
 
   if (!response) {
     return Response.error();

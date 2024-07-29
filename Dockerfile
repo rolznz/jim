@@ -2,7 +2,7 @@
 
 # Adjust NODE_VERSION as desired
 ARG NODE_VERSION=20.14.0
-FROM node:${NODE_VERSION}-slim as base
+FROM node:${NODE_VERSION} as base
 
 LABEL fly_launch_runtime="Next.js"
 
@@ -30,8 +30,7 @@ RUN yarn install --frozen-lockfile --production=false
 COPY --link . .
 
 # Build application
-ENV DATABASE_URL="file:/data/nwc_mint.db"
-RUN yarn run db:migrate:deploy
+RUN yarn run db:generate
 RUN yarn run build
 
 # Remove development dependencies
@@ -46,5 +45,4 @@ COPY --from=build /app /app
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-ENV DATABASE_URL="file:/data/nwc_mint.db"
-CMD [ "yarn", "run", "start" ]
+CMD yarn fly:migrate && yarn fly:start

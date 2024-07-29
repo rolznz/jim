@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "db:migrate:dev": "dotenv -e .env.local -- prisma migrate dev",
-    "db:migrate:deploy": "prisma migrate deploy"
+    "db:generate": "prisma generate",
+    "fly:migrate": "DATABASE_URL=\"file:/data/nwc_mint.db\" prisma migrate deploy",
+    "fly:start": "DATABASE_URL=\"file:/data/nwc_mint.db\" yarn start"
   },
   "dependencies": {
     "@getalby/bitcoin-connect-react": "^3.5.3",

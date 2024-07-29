@@ -22,7 +22,7 @@ export default function Home() {
       if (await hasPassword()) {
         password = prompt("Please enter the mint password") || undefined;
       }
-      setWallet(await createWallet(password, window.origin.split("//")[1]));
+      setWallet(await createWallet(password));
     } catch (error) {
       console.error(error);
       alert("Something went wrong: " + error);
@@ -105,7 +105,7 @@ export default function Home() {
                   }, 3000);
                 }}
               >
-                {copied ? "Copied!" : "Copy"}
+                {copied === "nwcUrl" ? "Copied!" : "Copy"}
               </button>
               <a
                 href={wallet.connectionSecret}
@@ -139,7 +139,7 @@ export default function Home() {
                   }, 3000);
                 }}
               >
-                {copied ? "Copied!" : "Copy"}
+                {copied === "lightningAddress" ? "Copied!" : "Copy"}
               </button>
             </p>
             <p className="text-xs max-w-xs text-center">

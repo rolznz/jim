@@ -17,10 +17,12 @@ export async function hasPassword() {
 }
 
 export async function createWallet(
-  password: string | undefined,
-  domain: string
+  password: string | undefined
 ): Promise<{ connectionSecret: string; lightningAddress: string } | undefined> {
   try {
+    if (!process.env.BASE_URL) {
+      throw new Error("No BASE_URL set");
+    }
     if (process.env.PASSWORD) {
       if (password !== process.env.PASSWORD) {
         return undefined;
@@ -56,6 +58,8 @@ export async function createWallet(
     }
 
     const { lightningAddress } = await saveConnectionSecret(newApp.pairingUri);
+
+    const domain = process.env.BASE_URL.split("//")[1];
 
     return {
       connectionSecret:

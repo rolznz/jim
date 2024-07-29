@@ -10,7 +10,7 @@ export async function GET(
     status: "OK",
     tag: "payRequest",
     commentAllowed: 255,
-    callback: request.url + "/callback",
+    callback: `${process.env.BASE_URL}/.well-known/lnurlp/${params.address}/callback`,
     minSendable: 1000,
     maxSendable: 10000000000,
   });
