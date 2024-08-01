@@ -60,6 +60,9 @@ You can get the SESSION_COOKIE by logging into Alby Hub and inspecting the reque
 - [x] create NWC connection secrets via REST API
 - [x] password protect
 - [x] basic lightning addresses
+- [ ] rename (it's not a mint)
+- [ ] scan QR
+- [ ] daily record of reserves
 - [ ] daily wallet creation rate limit
 - [ ] per-connection limits (so one user cannot use all the liquidity provided by the service)
 - [ ] extra open actions (Alby Account, Mobile Wallet, Web Wallet, Nostrudel?, ...) & instructions

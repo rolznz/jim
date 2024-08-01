@@ -115,6 +115,13 @@ export default function Home() {
               </a>
 
               <AlbyExtension connectionSecret={wallet.connectionSecret} />
+              <a
+                href={`https://getalby.com/nwc/new#${wallet.connectionSecret}`}
+                className="w-80 btn btn-lg btn-primary"
+                target="_blank"
+              >
+                Connect to Alby Account
+              </a>
             </div>
 
             <p className="text-sm mt-4">
