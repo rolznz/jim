@@ -1,8 +1,8 @@
-# NWC Mint
+# Alby Jim
+
+Become "Uncle Jim" and create instant wallets that you can give to your community, friends or family. They get wallets powered by your Alby Hub's liquidity, without having to know the first thing about lightning or bitcoin.
 
 Powered by [Alby Hub](https://getalby.com)
-
-Create a mint in minutes that you can give to your community, friends or family. They get wallets powered by your Alby Hub.
 
 App Connections have a 10 sat / 1% reserve to account for possible routing fees.
 
@@ -12,8 +12,8 @@ You can also create new wallets via the API. Simply do a POST request to `/api/w
 
 ```json
 {
-  "connectionSecret": "nostr+walletconnect://xxx?relay=yyy&secret=zzz&lud16=123456@nwc-mint.fly.dev",
-  "lightningAddress": "123456@nwc-mint.fly.dev"
+  "connectionSecret": "nostr+walletconnect://xxx?relay=yyy&secret=zzz&lud16=123456@alby-jim.fly.dev",
+  "lightningAddress": "123456@alby-jim.fly.dev"
 }
 ```
 
@@ -21,15 +21,15 @@ If a password is required, specify it in the `Authorization` header in the basic
 
 ## Development
 
-Copy .env.example to .env.local and update the ALBY_HUB_URL and SESSION_COOKIE property.
+Copy .env.example to .env.local and update the ALBYHUB_URL, ALBYHUB_NAME, and AUTH_TOKEN properties.
 
-You can get the SESSION_COOKIE by logging into Alby Hub and inspecting the request headers of network traffic in your browser dev tools of one of the XHR requests made to Alby Hub.
+You can get the ALBYHUB_URL, AUTH_TOKEN and ALBYHUB_NAME by logging into Alby Hub and Going to settings -> Developer. ALBYHUB_NAME is only needed for Alby Cloud-hosted Alby Hubs.
 
 Then, run the development server:
 
 ```bash
 yarn
-yarn db:migrate:local
+yarn db:migrate:dev
 yarn dev
 ```
 
@@ -40,9 +40,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 1. Get a fly account and install flyctl
 2. Update fly.toml to have a different app name
 3. Run fly launch
-4. Set your fly secrets: `fly secrets set ALBY_HUB_URL="https://nwc...onalby.com" SESSION_COOKIE="session=..." PASSWORD="" BASE_URL="https://YOURAPPNAME.fly.dev"`
+4. Set your fly secrets: `fly secrets set ALBYHUB_URL="" ALBYHUB_NAME="" BASE_URL="https://YOURAPPNAME.fly.dev"`
 
-You can get the SESSION_COOKIE by logging into Alby Hub and inspecting the request headers of network traffic in your browser dev tools of one of the XHR requests made to Alby Hub.
+You can get the ALBYHUB_URL, AUTH_TOKEN and ALBYHUB_NAME by logging into Alby Hub and Going to settings -> Developer. ALBYHUB_NAME is only needed for Alby Cloud-hosted Alby Hubs.
 
 ### Updating
 
@@ -50,19 +50,19 @@ You can get the SESSION_COOKIE by logging into Alby Hub and inspecting the reque
 
 ## TODOs
 
-- [x] One click mint
+- [x] One click wallet creation
 - [x] Show balance
 - [x] Topups
 - [x] Open in Alby Extension
 - [x] Open in default app
 - [x] Copy NWC connection
-- [x] show amount in custody, how many wallets minted, last used
+- [x] show amount in custody, how many wallets created, last used
 - [x] create NWC connection secrets via REST API
 - [x] password protect
 - [x] basic lightning addresses
-- [ ] rename (it's not a mint)
+- [ ] podcasting value block
 - [ ] scan QR
-- [ ] daily record of reserves
+- [ ] daily record of reserves + charts
 - [ ] daily wallet creation rate limit
 - [ ] per-connection limits (so one user cannot use all the liquidity provided by the service)
 - [ ] extra open actions (Alby Account, Mobile Wallet, Web Wallet, Nostrudel?, ...) & instructions
@@ -79,22 +79,19 @@ With [Alby Hub](https://getalby.com) it's now super easy to run your own node in
 
 The easiest solution right now is custodial wallets. But they are giant honeypots and can be shut down at any time and more and more often are required to do KYC or stop operating in certain jurisdictions. They also often do not use open protocols, making it hard for developers to integrate with them.
 
-NWC Mint is a custodial wallet, but it can be run by thousands of custodians - one per family, group or community.
+Alby Jim is a custodial service, but it can be run by thousands of custodians - one per family, group or community.
 
 These wallets can be created with **a single click** or **api call** making it incredibly easy for new wallets to be created by apps, without the app owner having to build a wallet into the app itself.
 
-### Why not just use E-cash or Fedimint?
+### Why not E-cash or Fedimint?
 
-NWC Mint gives out NWC connections which interact with the lightning network directly rather than minting and melting e-cash tokens. There are pros and cons of both, this is just another option people can choose.
+Alby Jim gives out NWC connections which interact with the lightning network directly rather than minting and melting e-cash tokens. There are pros and cons of both, this is just another option people can choose.
 
 NWC is an amazing protocol that works in all environments and makes it super easy for developers to make lightning powered apps, and does not care which wallet a user uses. By making it easy for developers to create lightning apps, the hope is that many high quality apps are created, giving flexibility to users (Bring your own App, Bring your own Wallet) rather than being locked into closed ecosystems.
 
 ### Isn't this just like other subaccount software (LNbits User plugin, LNDHub)?
 
-Yes. But:
-
-- Alby Hub and this mint is much easier to run, making it more likely to be adopted
-- Users receive NWC-powered wallets, rather than LNbits HTTP API or LNDHub protocol wallets.
+Yes. But Users receive NWC-powered wallets they can instantly plugin to many apps.
 
 ### Final thoughts
 

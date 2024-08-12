@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for nwc-mint on 2024-07-24T00:37:17+07:00
+# fly.toml app configuration file generated for jim on 2024-07-24T00:37:17+07:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'nwc-mint'
+app = 'alby-jim'
 primary_region = 'lax'
 swap_size_mb = 512
 
@@ -22,7 +22,7 @@ swap_size_mb = 512
   memory_mb = 512
 
 [[mounts]]
-  source = 'nwc_mint_data'
+  source = 'jim_data'
   destination = '/data'
   initial_size = '1'
 

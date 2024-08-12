@@ -20,7 +20,7 @@ export default function Page() {
   return (
     <>
       <p>Reserves</p>
-      <p>Number of wallets minted: {reserves.numApps}</p>
+      <p>Number of wallets with non-zero balance: {reserves.numApps}</p>
       <p>
         Total balance across wallets:{" "}
         {Math.floor(reserves.totalAppBalance / 1000)} sats

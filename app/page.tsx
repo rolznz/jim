@@ -20,7 +20,7 @@ export default function Home() {
     try {
       let password: string | undefined = undefined;
       if (await hasPassword()) {
-        password = prompt("Please enter the mint password") || undefined;
+        password = prompt("Please enter the password") || undefined;
       }
       setWallet(await createWallet(password));
     } catch (error) {
@@ -56,11 +56,11 @@ export default function Home() {
 
   return (
     <>
-      <p className="font-semibold">NWC Mint</p>
+      <p className="font-semibold">Alby Jim</p>
       <div className="flex flex-col gap-4 max-w-lg border-2 rounded-xl p-4 items-center justify-center mt-4 mb-16">
         {!wallet && (
           <p>
-            Mint a new wallet that you can use in any{" "}
+            Instantly create a new wallet that you can use in any{" "}
             <a href="https://nwc.dev" target="_blank" className="font-semibold">
               NWC-powered
             </a>{" "}
@@ -82,7 +82,7 @@ export default function Home() {
               disabled={loading}
               className={`btn btn-primary ${loading && "btn-disabled"}`}
             >
-              Mint Wallet
+              Create Wallet
             </button>
           </>
         )}
@@ -180,15 +180,12 @@ export default function Home() {
           View reserves
         </Link>
         <a
-          href="https://github.com/rolznz/nwc-mint?tab=readme-ov-file#api"
+          href="https://github.com/rolznz/jim?tab=readme-ov-file#api"
           className="text-xs link mt-4"
         >
           Developer API
         </a>
-        <a
-          href="https://github.com/rolznz/nwc-mint"
-          className="text-xs link mt-4"
-        >
+        <a href="https://github.com/rolznz/jim" className="text-xs link mt-4">
           source
         </a>
       </div>

@@ -26,7 +26,7 @@ export function Topup({ connectionSecret }: { connectionSecret: string }) {
       });
       const transaction = await client.makeInvoice({
         amount: amount * 1000,
-        description: "topup on NWC mint",
+        description: "topup on Alby Jim",
       });
       setInvoice(transaction.invoice);
 

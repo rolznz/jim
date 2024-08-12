@@ -3,9 +3,9 @@ import "./globals.css";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "NWC Mint",
+  title: "Alby Jim",
   description:
-    "A bitcoin lightning mint that gives isolated NWC Connection Secrets that can be used in any NWC-powered app such as Damus, Amethyst, Alby Browser Extension and Alby Account",
+    "An Uncle Jim service that gives out instant wallets that can be used in any NWC-powered app such as Damus, Amethyst, Alby Browser Extension and Alby Account",
 };
 
 export default function RootLayout({

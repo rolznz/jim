@@ -10,7 +10,7 @@ export type Reserves = {
   totalAppBalance: number;
 };
 
-const APP_NAME_PREFIX = "NWC mint ";
+const APP_NAME_PREFIX = "Alby Jim ";
 
 export async function hasPassword() {
   return !!process.env.PASSWORD;
@@ -29,7 +29,7 @@ export async function createWallet(
       }
     }
 
-    const newAppResponse = await fetch(`${process.env.ALBY_HUB_URL}/api/apps`, {
+    const newAppResponse = await fetch(`${process.env.ALBYHUB_URL}/api/apps`, {
       method: "POST",
       body: JSON.stringify({
         name: APP_NAME_PREFIX + Math.floor(Date.now() / 1000),
@@ -74,11 +74,11 @@ export async function createWallet(
 
 export async function getReserves(): Promise<Reserves | undefined> {
   try {
-    const apps = (await fetch(`${process.env.ALBY_HUB_URL}/api/apps`, {
+    const apps = (await fetch(`${process.env.ALBYHUB_URL}/api/apps`, {
       headers: getHeaders(),
     }).then((res) => res.json())) as { name: string; balance: number }[];
 
-    const channels = (await fetch(`${process.env.ALBY_HUB_URL}/api/channels`, {
+    const channels = (await fetch(`${process.env.ALBYHUB_URL}/api/channels`, {
       headers: getHeaders(),
     }).then((res) => res.json())) as {
       localSpendableBalance: number;
@@ -86,10 +86,10 @@ export async function getReserves(): Promise<Reserves | undefined> {
       remoteBalance: number;
     }[];
 
-    const mintApps = apps.filter(
+    const relevantApps = apps.filter(
       (app) => app.name.startsWith(APP_NAME_PREFIX) && app.balance > 0
     );
-    const totalAppBalance = mintApps
+    const totalAppBalance = relevantApps
       .map((app) => app.balance)
       .reduce((a, b) => a + b, 0);
 
@@ -101,7 +101,7 @@ export async function getReserves(): Promise<Reserves | undefined> {
       .reduce((a, b) => a + b, 0);
 
     return {
-      numApps: mintApps.length,
+      numApps: relevantApps.length,
       totalAppBalance,
       numChannels: channels.length,
       totalOutgoingCapacity,
@@ -113,16 +113,8 @@ export async function getReserves(): Promise<Reserves | undefined> {
   }
 }
 function getHeaders() {
-  const csrf = (process.env.SESSION_COOKIE as string)
-    .split("; ")
-    .find((v) => v.startsWith("_csrf"))
-    ?.substring("_csrf=".length);
-  if (!csrf) {
-    throw new Error("No CSRF in SESSION_COOKIE");
-  }
   return {
-    Cookie: process.env.SESSION_COOKIE as string,
-    "X-Csrf-Token": csrf,
+    Authorization: `Bearer ${process.env.AUTH_TOKEN}`,
     "Content-Type": "application/json",
     Accept: "application/json",
   };

@@ -1,5 +1,5 @@
 {
-  "name": "nwc-mint",
+  "name": "jim",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,8 +9,8 @@
     "lint": "next lint",
     "db:migrate:dev": "dotenv -e .env.local -- prisma migrate dev",
     "db:generate": "prisma generate",
-    "fly:migrate": "DATABASE_URL=\"file:/data/nwc_mint.db\" prisma migrate deploy",
-    "fly:start": "DATABASE_URL=\"file:/data/nwc_mint.db\" yarn start"
+    "fly:migrate": "DATABASE_URL=\"file:/data/jim.db\" prisma migrate deploy",
+    "fly:start": "DATABASE_URL=\"file:/data/jim.db\" yarn start"
   },
   "dependencies": {
     "@getalby/bitcoin-connect-react": "^3.5.3",
