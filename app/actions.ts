@@ -10,7 +10,7 @@ export type Reserves = {
   totalAppBalance: number;
 };
 
-const APP_NAME_PREFIX = "Alby Jim ";
+const APP_NAME_PREFIX = process.env.APP_NAME_PREFIX || "Alby Jim ";
 
 export async function hasPassword() {
   return !!process.env.PASSWORD;
@@ -115,6 +115,7 @@ export async function getReserves(): Promise<Reserves | undefined> {
 function getHeaders() {
   return {
     Authorization: `Bearer ${process.env.AUTH_TOKEN}`,
+    "AlbyHub-Name": process.env.ALBYHUB_NAME || "",
     "Content-Type": "application/json",
     Accept: "application/json",
   };
