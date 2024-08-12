@@ -16,5 +16,6 @@ export async function POST(request: Request) {
   return Response.json({
     connectionSecret: response?.connectionSecret,
     lightningAddress: response?.lightningAddress,
+    valueTag: response?.valueTag,
   });
 }

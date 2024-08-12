@@ -1,17 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import React from "react";
-import { createWallet, hasPassword } from "./actions";
+import { createWallet, hasPassword, Wallet } from "./actions";
 import { AlbyExtension } from "./components/AlbyExtension";
 import { Topup } from "./components/Topup";
 import { nwc } from "@getalby/sdk";
 import Link from "next/link";
 
 export default function Home() {
-  const [wallet, setWallet] = React.useState<{
-    connectionSecret: string;
-    lightningAddress: string;
-  }>();
+  const [wallet, setWallet] = React.useState<Wallet>();
   const [loading, setLoading] = React.useState(false);
   const [copied, setCopied] = React.useState<"nwcUrl" | "lightningAddress">();
   const [balance, setBalance] = React.useState(0);
@@ -153,6 +150,14 @@ export default function Home() {
               {
                 "It's like your email address, but people send you payments instead. You can share this publicly."
               }
+            </p>
+
+            <p className="mt-8 text-sm">Your podcasting 2.0 value tag is:</p>
+            <p className="max-w-sm bg-gray-300 p-4 rounded-lg break-words">
+              <span className="font-mono font-semibold">{wallet.valueTag}</span>
+            </p>
+            <p className="text-xs max-w-xs text-center">
+              {"Add this to your podcast RSS feed to activate podcasting 2.0!"}
             </p>
           </>
         )}

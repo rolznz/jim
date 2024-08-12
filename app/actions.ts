@@ -10,7 +10,15 @@ export type Reserves = {
   totalAppBalance: number;
 };
 
+export type Wallet = {
+  connectionSecret: string;
+  lightningAddress: string;
+  valueTag: string;
+};
+
 const APP_NAME_PREFIX = process.env.APP_NAME_PREFIX || "Alby Jim ";
+
+let nodePubkey: string;
 
 export async function hasPassword() {
   return !!process.env.PASSWORD;
@@ -18,7 +26,7 @@ export async function hasPassword() {
 
 export async function createWallet(
   password: string | undefined
-): Promise<{ connectionSecret: string; lightningAddress: string } | undefined> {
+): Promise<Wallet | undefined> {
   try {
     if (!process.env.BASE_URL) {
       throw new Error("No BASE_URL set");
@@ -29,6 +37,26 @@ export async function createWallet(
       }
     }
 
+    if (!nodePubkey) {
+      const connectionInfoResponse = await fetch(
+        `${process.env.ALBYHUB_URL}/api/node/connection-info`,
+        {
+          headers: getHeaders(),
+        }
+      );
+      if (!connectionInfoResponse.ok) {
+        throw new Error(
+          "Failed to create app: " + (await connectionInfoResponse.text())
+        );
+      }
+      const nodeInfo: { pubkey: string } = await connectionInfoResponse.json();
+      if (!nodeInfo.pubkey) {
+        throw new Error("Could not find pubkey in node response");
+      }
+      nodePubkey = nodeInfo.pubkey;
+    }
+
+    let appId: number;
     const newAppResponse = await fetch(`${process.env.ALBYHUB_URL}/api/apps`, {
       method: "POST",
       body: JSON.stringify({
@@ -52,10 +80,28 @@ export async function createWallet(
     if (!newAppResponse.ok) {
       throw new Error("Failed to create app: " + (await newAppResponse.text()));
     }
-    const newApp: { pairingUri: string } = await newAppResponse.json();
+    // TODO: app id should also be returned here
+    const newApp: { pairingUri: string; pairingPublicKey: string } =
+      await newAppResponse.json();
     if (!newApp.pairingUri) {
       throw new Error("No pairing URI in create app response");
     }
+
+    // TODO: remove once app id is returned in create call
+    const appResponse = await fetch(
+      `${process.env.ALBYHUB_URL}/api/apps/${newApp.pairingPublicKey}`,
+      {
+        headers: getHeaders(),
+      }
+    );
+    if (!appResponse.ok) {
+      throw new Error("Failed to create app: " + (await appResponse.text()));
+    }
+    const appInfo: { id: number } = await appResponse.json();
+    if (!appInfo.id) {
+      throw new Error("Could not find id in app response");
+    }
+    appId = appInfo.id;
 
     const { lightningAddress } = await saveConnectionSecret(newApp.pairingUri);
 
@@ -65,6 +111,14 @@ export async function createWallet(
       connectionSecret:
         newApp.pairingUri + `&lud16=${lightningAddress}@${domain}`,
       lightningAddress: lightningAddress + "@" + domain,
+      valueTag: `<podcast:value type="lightning" method="keysend">
+    <podcast:valueRecipient name="${
+      lightningAddress + "@" + domain
+    }" type="node" address="${nodePubkey}" customKey="696969"  customValue="${Buffer.from(
+        appId.toString(),
+        "utf8"
+      ).toString("hex")}" split="100"/>
+  </podcast:value>`,
     };
   } catch (error) {
     console.error(error);

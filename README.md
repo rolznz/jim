@@ -60,7 +60,7 @@ You can get the ALBYHUB_URL, AUTH_TOKEN and ALBYHUB_NAME by logging into Alby Hu
 - [x] create NWC connection secrets via REST API
 - [x] password protect
 - [x] basic lightning addresses
-- [ ] podcasting value block
+- [x] podcasting value tag
 - [ ] scan QR
 - [ ] daily record of reserves + charts
 - [ ] daily wallet creation rate limit
