@@ -114,10 +114,7 @@ export async function createWallet(
       valueTag: `<podcast:value type="lightning" method="keysend">
     <podcast:valueRecipient name="${
       lightningAddress + "@" + domain
-    }" type="node" address="${nodePubkey}" customKey="696969"  customValue="${Buffer.from(
-        appId.toString(),
-        "utf8"
-      ).toString("hex")}" split="100"/>
+    }" type="node" address="${nodePubkey}" customKey="696969"  customValue="${appId}" split="100"/>
   </podcast:value>`,
     };
   } catch (error) {
